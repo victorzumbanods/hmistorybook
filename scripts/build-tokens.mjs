@@ -7,7 +7,7 @@
 //   Collection "Theme", modes Light/Dark  →  :root, [data-theme="light"] { … }  [data-theme="dark"] { … }
 // Aliases stay aliases (var(--other-token)), so modes cascade exactly like they do in Figma.
 
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { normalize, serialize } from './lib/normalize.mjs'
@@ -18,6 +18,13 @@ const OUT_DIR = resolve(ROOT, 'src/tokens')
 
 const PX_SCOPES = new Set(['WIDTH_HEIGHT', 'GAP', 'CORNER_RADIUS', 'STROKE_FLOAT', 'FONT_SIZE', 'LINE_HEIGHT', 'LETTER_SPACING', 'PARAGRAPH_SPACING', 'PARAGRAPH_INDENT', 'EFFECT_FLOAT'])
 const UNITLESS_NAME = /(weight|opacity|z-?index|ratio|scale|duration|count|columns|order)/i
+
+// Skip identical writes: rewriting a watched file would retrigger the Storybook watcher forever.
+function writeIfChanged(file, content) {
+  if (existsSync(file) && readFileSync(file, 'utf8') === content) return false
+  writeFileSync(file, content)
+  return true
+}
 
 export const slugify = (s) =>
   s.trim().replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
@@ -58,7 +65,8 @@ function formatRaw(value, v) {
 }
 
 export function buildTokens({ source = SOURCE, outDir = OUT_DIR, log = console.log } = {}) {
-  const { meta } = normalize(JSON.parse(readFileSync(source, 'utf8')))
+  const raw = readFileSync(source, 'utf8')
+  const { meta } = normalize(JSON.parse(raw))
   const collections = Object.values(meta.variableCollections)
   const variables = Object.values(meta.variables)
   const byId = new Map(variables.map((v) => [v.id, v]))
@@ -178,11 +186,12 @@ export function buildTokens({ source = SOURCE, outDir = OUT_DIR, log = console.l
     `export type CssVar =\n${[...new Set(docsTokens.map((t) => t.cssVar))].map((n) => `  | '${n}'`).join('\n')}\n`
 
   mkdirSync(outDir, { recursive: true })
-  writeFileSync(resolve(outDir, 'tokens.css'), css)
-  writeFileSync(resolve(outDir, 'tokens.json'), serialize({ collections: docsCollections, tokens: docsTokens }))
-  writeFileSync(resolve(outDir, 'tokens.ts'), ts)
+  writeIfChanged(resolve(outDir, 'tokens.css'), css)
+  writeIfChanged(resolve(outDir, 'tokens.json'), serialize({ collections: docsCollections, tokens: docsTokens }))
+  writeIfChanged(resolve(outDir, 'tokens.ts'), ts)
   // Re-write the source in canonical form (no-op when already canonical).
-  writeFileSync(source, serialize({ meta }))
+  const canonical = serialize({ meta })
+  if (canonical !== raw) writeFileSync(source, canonical)
 
   for (const w of warnings) log(`⚠︎ ${w}`)
   log(`✓ tokens: ${docsTokens.length} variables · ${docsCollections.length} collections → src/tokens/`)

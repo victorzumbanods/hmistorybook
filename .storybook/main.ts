@@ -15,8 +15,18 @@ function figmaTokensWatcher(): Plugin {
     },
     configureServer(server) {
       server.watcher.add(SOURCE)
+      // Debounced and guarded: the file can be read mid-write (git pull, editors), which must not kill the server.
+      let timer: ReturnType<typeof setTimeout> | undefined
       server.watcher.on('change', (file) => {
-        if (resolve(file) === SOURCE) buildTokens()
+        if (resolve(file) !== SOURCE) return
+        clearTimeout(timer)
+        timer = setTimeout(() => {
+          try {
+            buildTokens()
+          } catch (err) {
+            console.error(`⚠︎ figma-tokens: kept previous tokens, could not build (${(err as Error).message})`)
+          }
+        }, 150)
       })
     },
   }
