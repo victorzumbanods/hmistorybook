@@ -5,7 +5,7 @@ import './02-architecture-and-naming.css'
 
 // Content: [HMI] Foundations › "Architecture and naming" (Figma 6:6041), verbatim.
 
-const meta = { title: 'Foundations/Architecture and naming', parameters: { layout: 'fullscreen' } } satisfies Meta
+const meta = { title: 'Foundations/Architecture and naming', tags: ['doc-page'], parameters: { layout: 'fullscreen', controls: { disable: true }, actions: { disable: true }, interactions: { disable: true } } } satisfies Meta
 export default meta
 
 /** Live CSS variable for a Figma variable, falling back to the value shown in the Figma snapshot until it is synced. */

@@ -4,7 +4,7 @@ import './05-typography-and-missing-foundations.css'
 
 // Content: [HMI] Foundations › "Typography and missing foundations" (Figma 6:6817), verbatim.
 
-const meta = { title: 'Foundations/Typography and missing foundations', parameters: { layout: 'fullscreen' } } satisfies Meta
+const meta = { title: 'Foundations/Typography and missing foundations', tags: ['doc-page'], parameters: { layout: 'fullscreen', controls: { disable: true }, actions: { disable: true }, interactions: { disable: true } } } satisfies Meta
 export default meta
 
 const id = (name: string, variableId: string) => (

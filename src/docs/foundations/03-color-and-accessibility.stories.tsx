@@ -5,7 +5,7 @@ import './03-color-and-accessibility.css'
 
 // Content: [HMI] Foundations › "Color and accessibility" (Figma 6:6222), verbatim.
 
-const meta = { title: 'Foundations/Color and accessibility', parameters: { layout: 'fullscreen' } } satisfies Meta
+const meta = { title: 'Foundations/Color and accessibility', tags: ['doc-page'], parameters: { layout: 'fullscreen', controls: { disable: true }, actions: { disable: true }, interactions: { disable: true } } } satisfies Meta
 export default meta
 
 /* Live specimen helpers: the Figma variable drives the color; the Figma snapshot value is the fallback

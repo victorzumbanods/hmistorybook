@@ -3,7 +3,7 @@ import { Callout, DocPage, Mono, Note, Panel, Section, Stats, Sub, Table } from 
 
 // Content: [HMI] Foundations › ⚙️ Token Strategy › "Token strategy" (Figma 6:5894), verbatim.
 
-const meta = { title: 'Foundations/Token strategy', parameters: { layout: 'fullscreen' } } satisfies Meta
+const meta = { title: 'Foundations/Token strategy', tags: ['doc-page'], parameters: { layout: 'fullscreen', controls: { disable: true }, actions: { disable: true }, interactions: { disable: true } } } satisfies Meta
 export default meta
 
 function Page() {

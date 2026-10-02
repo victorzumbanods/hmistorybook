@@ -4,7 +4,7 @@ import tokensFile from '../tokens/tokens.json'
 import { CHAPTERS, TOKENS, cssVar } from './foundations/Doc'
 import './intro.css'
 
-const meta = { title: 'Introduction', parameters: { layout: 'fullscreen' } } satisfies Meta
+const meta = { title: 'Introduction', tags: ['doc-page'], parameters: { layout: 'fullscreen', controls: { disable: true }, actions: { disable: true }, interactions: { disable: true } } } satisfies Meta
 export default meta
 
 const collections = (tokensFile as unknown as { collections: { name: string; modes: { name: string }[] }[] }).collections

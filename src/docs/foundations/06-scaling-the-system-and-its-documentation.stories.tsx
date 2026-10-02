@@ -4,7 +4,7 @@ import './06-scaling-the-system-and-its-documentation.css'
 
 // Content: [HMI] Foundations › "Scaling the system and its documentation" (Figma 6:6971), verbatim.
 
-const meta = { title: 'Foundations/Scaling the system and its documentation', parameters: { layout: 'fullscreen' } } satisfies Meta
+const meta = { title: 'Foundations/Scaling the system and its documentation', tags: ['doc-page'], parameters: { layout: 'fullscreen', controls: { disable: true }, actions: { disable: true }, interactions: { disable: true } } } satisfies Meta
 export default meta
 
 /** Live radius bound to the Figma variable border/radius/md (falls back to its snapshot value, 8). */

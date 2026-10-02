@@ -6,7 +6,7 @@ import './04-geometry-and-layout.css'
 // Content: [HMI] Foundations › "Geometry and layout" (Figma 6:6579), verbatim.
 // Previews and gap examples bind to the Figma variables through cssVar(); the Figma binding's own value is the fallback.
 
-const meta = { title: 'Foundations/Geometry and layout', parameters: { layout: 'fullscreen' } } satisfies Meta
+const meta = { title: 'Foundations/Geometry and layout', tags: ['doc-page'], parameters: { layout: 'fullscreen', controls: { disable: true }, actions: { disable: true }, interactions: { disable: true } } } satisfies Meta
 export default meta
 
 /** `var(--token, fallback)` for a Figma variable, so the specimen follows the variable after every sync. */
