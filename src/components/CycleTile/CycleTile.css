@@ -1,0 +1,26 @@
+.hmi-cycle-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-2);
+  min-width: var(--size-tile-min-width);
+  padding: var(--size-tile-padding);
+  border: 2px solid var(--color-border-default);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-raised);
+  color: var(--color-text-primary);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 120ms ease, background-color 120ms ease;
+}
+.hmi-cycle-tile:hover { border-color: var(--color-border-strong); }
+.hmi-cycle-tile[aria-pressed='true'] {
+  border-color: var(--color-selected-border);
+  background: var(--color-selected-background);
+}
+.hmi-cycle-tile__icon { width: calc(var(--size-icon) * 1.5); height: calc(var(--size-icon) * 1.5); color: var(--color-action-primary-default); }
+.hmi-cycle-tile__icon > svg { width: 100%; height: 100%; }
+.hmi-cycle-tile__name { font-size: var(--size-control-font-size); font-weight: var(--font-weight-bold); }
+.hmi-cycle-tile__duration { font-size: var(--font-size-sm); color: var(--color-text-secondary); font-variant-numeric: tabular-nums; }
+.hmi-cycle-tile:disabled { cursor: not-allowed; opacity: 0.5; }

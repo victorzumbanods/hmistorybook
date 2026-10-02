@@ -1,0 +1,32 @@
+{
+  "name": "hmi-storybook",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "build": "npm run tokens:build && storybook build",
+    "tokens:build": "node scripts/build-tokens.mjs",
+    "tokens:pull": "node scripts/figma-pull.mjs",
+    "tokens:sync": "npm run tokens:pull && npm run tokens:build",
+    "typecheck": "tsc -b",
+    "lint": "oxlint"
+  },
+  "dependencies": {
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "oxlint": "^1.81.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.3.0",
+    "storybook": "^10.6.1",
+    "@storybook/react-vite": "^10.6.1",
+    "@storybook/addon-docs": "^10.6.1"
+  }
+}

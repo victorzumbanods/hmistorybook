@@ -1,0 +1,22 @@
+/* Global base styles. Every value comes from a Figma variable (src/tokens/tokens.css). */
+@import '../tokens/tokens.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family-sans), system-ui, sans-serif;
+  font-size: var(--font-size-md);
+  color: var(--color-text-primary);
+  background: var(--color-surface-default);
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-border-focus);
+  outline-offset: 2px;
+}
