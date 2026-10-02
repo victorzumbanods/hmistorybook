@@ -1,0 +1,43 @@
+/* Chapter 04 "Geometry and layout" (Figma 6:6579). Raw values match the raw values in Figma;
+   every geometry property that Figma binds to a variable is set inline from cssVar(). */
+
+/* Wide tables scroll inside their own box at narrow widths, never the page */
+.hmi-c4__scroll { overflow-x: auto; min-width: 0; }
+.hmi-c4__scroll .hmi-doc__table { min-width: 560px; }
+
+/* ---------- geometry mapping tables (sections 1 and 2) */
+.hmi-c4__geometry .hmi-doc__table td { padding: 14px 16px; vertical-align: middle; }
+.hmi-c4__geometry .hmi-doc__table td:last-child { padding: 4px 16px; }
+.hmi-c4__id { display: flex; flex-direction: column; gap: 4px; color: var(--doc-muted); }
+.hmi-c4__token { font-family: var(--doc-mono); }
+.hmi-c4__short { font-weight: 600; }
+.hmi-c4__value { font-family: var(--doc-mono); font-size: 16px; color: var(--doc-text); }
+
+/* Bound previews: 88 × 40 rectangles centered in the preview cell (4px padding) */
+.hmi-c4__preview { display: flex; justify-content: center; padding: 4px; }
+.hmi-c4__radius-box { width: 88px; height: 40px; flex: none; background: #252621; border: 0 solid #252621; }
+.hmi-c4__border-box { width: 88px; height: 40px; flex: none; background: #fcfbf8; border-style: solid; border-color: #252621; border-radius: 6px; }
+
+/* ---------- breakpoint reference table (section 3) */
+.hmi-c4__ref .hmi-doc__table td { color: var(--doc-text); }
+.hmi-c4__ref .hmi-doc__table td:first-child { font-family: var(--doc-mono); }
+
+/* ---------- light panels (spacing reference, comparison examples) */
+.hmi-c4__panel { display: flex; flex-direction: column; gap: 20px; padding: 28px; border-radius: 12px; background: var(--doc-header-bg); min-width: 0; }
+.hmi-c4__panel-text { font-size: 16px; line-height: 1.5; color: var(--doc-muted); }
+.hmi-c4__panel-title { margin: 0; font-size: 25px; line-height: 1.2; font-weight: 600; color: var(--doc-text); }
+
+/* Spacing table inside the panel: header shares the panel fill, last row has no rule */
+.hmi-c4__panel .hmi-doc__table th { padding: 12px 16px; background: var(--doc-header-bg); }
+.hmi-c4__panel .hmi-doc__table td { padding: 14px 16px; }
+.hmi-c4__panel .hmi-doc__table tbody tr:last-child td { border-bottom: 0; }
+.hmi-c4__spacing .hmi-doc__table td { color: var(--doc-muted); }
+.hmi-c4__spacing .hmi-doc__table td:nth-child(-n + 2) { font-family: var(--doc-mono); color: var(--doc-text); }
+
+/* Bound gap examples: three 48 × 24 blocks, gap bound to a spacing variable */
+.hmi-c4__gap-row { display: flex; align-items: flex-start; flex-wrap: wrap; }
+.hmi-c4__gap-row > span { width: 48px; height: 24px; flex: none; border-radius: 4px; background: #eeb111; }
+.hmi-c4__caption { font-size: 14px; line-height: 1.5; color: var(--doc-muted); }
+
+/* ---------- comparison */
+.hmi-c4__compare { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 20px; }

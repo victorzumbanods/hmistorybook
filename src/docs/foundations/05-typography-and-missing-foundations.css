@@ -1,0 +1,24 @@
+/* Chapter 05 extras: snapshot summary panel, Inter illustration specimen and ordered steps.
+   Every value here is a raw value in Figma too (get_variable_defs returned none for these frames). */
+
+/* ---------- snapshot summary panel (10:77) */
+.hmi-c5__summary { display: flex; flex-direction: column; gap: 12px; padding: 24px 28px; border-radius: 12px; background: var(--doc-header-bg); color: var(--doc-muted); font-size: 14px; line-height: 1.5; }
+.hmi-c5__summary strong { font-size: 16px; font-weight: 600; color: var(--doc-text); }
+
+/* ---------- illustration specimen (10:186): Inter only, no tokens */
+.hmi-c5__specimen { display: flex; flex-direction: column; gap: 20px; padding: 28px; border-radius: 12px; background: #f1f0e9; font-family: Inter, system-ui, sans-serif; }
+.hmi-c5__specimen-eyebrow { font-size: 12px; line-height: 1.4; font-weight: 600; text-transform: uppercase; color: #686862; }
+.hmi-c5__specimen-title { margin: 0; font-size: 40px; line-height: 1.2; font-weight: 500; text-transform: none; color: #22221f; }
+.hmi-c5__specimen-body { max-width: 760px; font-size: 17px; line-height: 1.55; font-weight: 400; color: #686862; }
+.hmi-c5__specimen-meta { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px 24px; padding-top: 18px; border-top: 1px solid #dcdcd3; font-size: 12px; line-height: normal; font-weight: 400; color: #686862; }
+
+/* ---------- ordered steps (10:198) */
+.hmi-c5__steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+.hmi-c5__step { display: flex; gap: 16px; padding: 20px 20px 20px 0; border-top: 1px solid var(--doc-line); }
+.hmi-c5__step-marker { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 50%; background: #f8f0d9; font-size: 13px; font-weight: 600; color: var(--doc-text); }
+.hmi-c5__step-text { display: flex; flex-direction: column; gap: 8px; min-width: 0; font-size: 14px; line-height: 1.5; color: var(--doc-muted); }
+.hmi-c5__step-title { margin: 0; font-size: 16px; line-height: 1.4; font-weight: 600; color: var(--doc-text); }
+
+@media (max-width: 900px) {
+  .hmi-c5__specimen-title { font-size: 32px; }
+}

@@ -1,0 +1,49 @@
+/* Chapter 02 "Architecture and naming" (Figma 6:6041) — chapter-specific specimens.
+   Page chrome colors are raw values in Figma; the gold accent and bound previews read Figma variables. */
+
+/* ---------- numbered steps (6:6071) */
+.hmi-c2__steps { display: flex; flex-direction: column; gap: 16px; margin: 0; padding: 0; list-style: none; }
+.hmi-c2__step { display: flex; gap: 18px; padding-bottom: 16px; border-bottom: 1px solid var(--doc-line); }
+.hmi-c2__marker { flex: none; display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 50%; background: var(--doc-callout-bg); font-size: 13px; font-weight: 600; color: var(--doc-text); }
+.hmi-c2__step-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; font-size: 16px; line-height: 1.5; color: var(--doc-muted); }
+.hmi-c2__step-body strong { font-weight: 600; }
+
+/* ---------- alias graph (6:6110) */
+.hmi-c2__graph { display: flex; align-items: stretch; gap: 16px; }
+.hmi-c2__node { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 20px; border-radius: 6px; background: #363731; }
+.hmi-c2__node-eyebrow { font-size: 12px; line-height: 1.4; font-weight: 600; text-transform: uppercase; color: var(--doc-dark-muted); }
+.hmi-c2__node-name { font-size: 25px; line-height: 1.2; font-weight: 600; color: var(--doc-dark-text); }
+.hmi-c2__node-body { font-size: 14px; line-height: 1.5; color: var(--doc-dark-muted); overflow-wrap: anywhere; }
+.hmi-c2__connection { flex: none; width: 124px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
+.hmi-c2__arrow { font-size: 40px; line-height: 1; font-weight: 400; }
+.hmi-c2__connection-caption { font-size: 12px; line-height: 1.4; text-align: center; color: var(--doc-dark-muted); }
+
+/* ---------- proposed layer, dashed (6:6127) */
+.hmi-c2__proposed { display: flex; flex-direction: column; gap: 16px; padding: 24px; border: 1px dashed var(--doc-line); border-radius: 6px; }
+.hmi-c2__proposed-row { display: flex; align-items: center; gap: 20px; }
+.hmi-c2__proposed-item { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.hmi-c2__proposed-title { font-size: 25px; line-height: 1.2; font-weight: 600; color: var(--doc-text); }
+.hmi-c2__proposed-body,
+.hmi-c2__proposed-foot { font-size: 14px; line-height: 1.5; color: var(--doc-muted); }
+.hmi-c2__proposed-arrow { flex: none; font-size: 30px; line-height: 1; color: var(--doc-text); }
+
+/* ---------- table cells with stacked lines */
+.hmi-c2__lines > span { display: block; }
+.hmi-c2__lines code { font-size: 14px; }
+
+/* ---------- bound alias previews (6:6169) */
+.hmi-c2__previews { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 16px; }
+.hmi-c2__preview { display: flex; flex-direction: column; gap: 10px; font-size: 14px; line-height: 1.5; color: var(--doc-muted); }
+.hmi-c2__preview-fill { height: 48px; width: 100%; border-radius: 4px; }
+
+/* ---------- light grammar panel (6:6210) */
+.hmi-c2__light-panel { display: flex; flex-direction: column; gap: 20px; padding: 28px; border-radius: 12px; background: var(--doc-header-bg); font-size: 16px; line-height: 1.5; color: var(--doc-muted); }
+.hmi-c2__grammar { font-size: 25px; line-height: 1.2; font-weight: 600; color: var(--doc-text); overflow-wrap: anywhere; }
+
+@media (max-width: 900px) {
+  .hmi-c2__graph { flex-direction: column; }
+  .hmi-c2__connection { width: auto; flex-direction: row; padding: 4px 0; }
+  .hmi-c2__arrow { transform: rotate(90deg); }
+  .hmi-c2__proposed-row { flex-direction: column; align-items: flex-start; }
+  .hmi-c2__proposed-arrow { transform: rotate(90deg); }
+}

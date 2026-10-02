@@ -33,7 +33,24 @@ const preview: Preview = {
     layout: 'padded',
     backgrounds: { disable: true },
     controls: { matchers: { color: /(background|color)$/i, date: /Date$/i } },
-    options: { storySort: { order: ['Introduction', 'Foundations', 'Components', 'Examples'] } },
+    options: {
+      storySort: {
+        order: [
+          'Introduction',
+          'Foundations',
+          [
+            'Token strategy',
+            'Architecture and naming',
+            'Color and accessibility',
+            'Geometry and layout',
+            'Typography and missing foundations',
+            'Scaling the system and its documentation',
+            'Figma Variables',
+          ],
+          'Components',
+        ],
+      },
+    },
   },
 }
 

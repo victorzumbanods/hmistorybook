@@ -17,6 +17,7 @@ export const SOURCE = resolve(ROOT, 'tokens/figma-variables.json')
 const OUT_DIR = resolve(ROOT, 'src/tokens')
 
 const PX_SCOPES = new Set(['WIDTH_HEIGHT', 'GAP', 'CORNER_RADIUS', 'STROKE_FLOAT', 'FONT_SIZE', 'LINE_HEIGHT', 'LETTER_SPACING', 'PARAGRAPH_SPACING', 'PARAGRAPH_INDENT', 'EFFECT_FLOAT'])
+const CSS_KEYWORDS = new Set(['uppercase', 'lowercase', 'capitalize', 'none', 'full-width'])
 const UNITLESS_NAME = /(weight|opacity|z-?index|ratio|scale|duration|count|columns|order)/i
 
 // Skip identical writes: rewriting a watched file would retrigger the Storybook watcher forever.
@@ -58,7 +59,10 @@ function formatRaw(value, v) {
   switch (v.resolvedType) {
     case 'COLOR': return formatColor(value)
     case 'FLOAT': return formatFloat(value, v)
-    case 'STRING': return `"${String(value).replace(/"/g, '\\"')}"`
+    case 'STRING':
+      // CSS keywords (text-transform values) must stay unquoted; everything else is a quoted string.
+      if (/text-(transform|case)/i.test(v.name) || CSS_KEYWORDS.has(String(value))) return String(value)
+      return `"${String(value).replace(/"/g, '\\"')}"`
     case 'BOOLEAN': return value ? '1' : '0'
     default: return String(value)
   }
@@ -84,6 +88,17 @@ export function buildTokens({ source = SOURCE, outDir = OUT_DIR, log = console.l
   const valueFor = (v, modeId) => {
     const value = v.valuesByMode[modeId]
     if (value === undefined) return null
+    if (value && typeof value === 'object' && 'opacity' in value && 'color' in value) {
+      // Alias (or color) with opacity → color-mix keeps the link to the source token.
+      const inner = value.color
+      const target = inner?.type === 'VARIABLE_ALIAS' ? byId.get(inner.id) : null
+      if (inner?.type === 'VARIABLE_ALIAS' && !target) {
+        warnings.push(`"${v.name}" aliases a variable that is not in the export (${inner.id}).`)
+        return null
+      }
+      const base = target ? `var(${cssVarName(target)})` : formatColor(inner)
+      return { css: `color-mix(in srgb, ${base} ${value.opacity}%, transparent)`, alias: target ? `${target.name} @ ${value.opacity}%` : null }
+    }
     if (value?.type === 'VARIABLE_ALIAS') {
       const target = byId.get(value.id)
       if (!target) {
@@ -102,11 +117,30 @@ export function buildTokens({ source = SOURCE, outDir = OUT_DIR, log = console.l
     if (!col) return null
     const mode = col.modes.find((m) => m.name === modeName) ?? col.modes.find((m) => m.modeId === col.defaultModeId)
     const value = v.valuesByMode[mode.modeId]
+    if (value && typeof value === 'object' && 'opacity' in value && 'color' in value) {
+      const base = value.color?.type === 'VARIABLE_ALIAS' ? resolveColor(byId.get(value.color.id), modeName, depth + 1) : value.color
+      return base ? formatColor({ ...base, a: (base.a ?? 1) * (value.opacity / 100) }) : null
+    }
     if (value?.type === 'VARIABLE_ALIAS') {
       const target = byId.get(value.id)
       return target ? resolveLiteral(target, modeName, depth + 1) : null
     }
     return value === undefined ? null : formatRaw(value, v)
+  }
+
+  // Same walk as resolveLiteral, but returns the RGBA object (needed to apply opacity on top of an alias).
+  const resolveColor = (v, modeName, depth = 0) => {
+    if (!v || depth > 20) return null
+    const col = colById.get(v.variableCollectionId)
+    if (!col) return null
+    const mode = col.modes.find((m) => m.name === modeName) ?? col.modes.find((m) => m.modeId === col.defaultModeId)
+    const value = v.valuesByMode[mode.modeId]
+    if (value && typeof value === 'object' && 'opacity' in value && 'color' in value) {
+      const base = value.color?.type === 'VARIABLE_ALIAS' ? resolveColor(byId.get(value.color.id), modeName, depth + 1) : value.color
+      return base ? { ...base, a: (base.a ?? 1) * (value.opacity / 100) } : null
+    }
+    if (value?.type === 'VARIABLE_ALIAS') return resolveColor(byId.get(value.id), modeName, depth + 1)
+    return value && typeof value === 'object' && 'r' in value ? value : null
   }
 
   // ---- CSS
@@ -189,9 +223,8 @@ export function buildTokens({ source = SOURCE, outDir = OUT_DIR, log = console.l
   writeIfChanged(resolve(outDir, 'tokens.css'), css)
   writeIfChanged(resolve(outDir, 'tokens.json'), serialize({ collections: docsCollections, tokens: docsTokens }))
   writeIfChanged(resolve(outDir, 'tokens.ts'), ts)
-  // Re-write the source in canonical form (no-op when already canonical).
-  const canonical = serialize({ meta })
-  if (canonical !== raw) writeFileSync(source, canonical)
+  // The source is never rewritten here: only the Figma plugin and scripts/figma-pull.mjs write it.
+  if (serialize({ meta }) !== raw) log('⚠︎ tokens/figma-variables.json is not in canonical form (re-export it from Figma).')
 
   for (const w of warnings) log(`⚠︎ ${w}`)
   log(`✓ tokens: ${docsTokens.length} variables · ${docsCollections.length} collections → src/tokens/`)

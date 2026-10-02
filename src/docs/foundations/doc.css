@@ -1,0 +1,113 @@
+/* Documentation page layout, rebuilt from the [HMI] Foundations "Token Strategy" page (Figma 2:365).
+   Page chrome colors are raw values in Figma too; only the accent is a Figma variable. */
+
+.hmi-doc {
+  --doc-bg: #fcfbf8;
+  --doc-text: #22221f;
+  --doc-muted: #686862;
+  --doc-line: #dcdcd3;
+  --doc-header-bg: #f1f0e9;
+  --doc-callout-bg: #f8f0d9;
+  --doc-accent: var(--color-identity-whirlpool-gold, #eeb111);
+  --doc-dark-bg: #252621;
+  --doc-dark-text: #f7f6f0;
+  --doc-dark-muted: #c3c4b8;
+  --doc-mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  max-width: 1440px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 36px 56px 32px;
+  background: var(--doc-bg);
+  color: var(--doc-text);
+  font-family: Inter, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.hmi-doc *,
+.hmi-doc *::before,
+.hmi-doc *::after { box-sizing: border-box; }
+.hmi-doc p { margin: 0; }
+.hmi-doc a { color: inherit; text-decoration: none; }
+.hmi-doc code,
+.hmi-doc .mono { font-family: var(--doc-mono); }
+
+/* ---------- status bar */
+.hmi-doc__status { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; }
+.hmi-doc__identity { display: flex; align-items: center; gap: 12px; font-size: 15px; font-weight: 600; white-space: nowrap; }
+.hmi-doc__identity::before { content: ''; width: 12px; height: 12px; border-radius: 2px; background: var(--doc-accent); }
+.hmi-doc__source { display: flex; align-items: center; gap: 24px; font-size: 12px; color: var(--doc-muted); }
+.hmi-doc__pill { display: inline-flex; align-items: center; gap: 7px; padding: 7px 12px; border: 1px solid var(--doc-line); border-radius: 999px; font-size: 11px; color: var(--doc-text); }
+.hmi-doc__pill::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--doc-accent); }
+
+/* ---------- chapter navigation */
+.hmi-doc__nav { display: flex; gap: 20px; }
+.hmi-doc__nav a { flex: 1; padding: 14px 0 12px; border-top: 1px solid var(--doc-line); font-size: 13px; color: var(--doc-muted); }
+.hmi-doc__nav a:hover { color: var(--doc-text); }
+.hmi-doc__nav a[aria-current='page'] { border-top: 3px solid var(--doc-accent); padding-top: 12px; font-weight: 600; color: var(--doc-text); }
+
+/* ---------- chapter heading */
+.hmi-doc__heading { display: flex; gap: 40px; padding: 8px 0; }
+.hmi-doc__heading-text { flex: 1; display: flex; flex-direction: column; gap: 20px; }
+.hmi-doc__context { font-size: 12px; line-height: 1.4; font-weight: 600; text-transform: uppercase; color: var(--doc-muted); }
+.hmi-doc__title { margin: 0; font-size: 60px; line-height: 1.08; font-weight: 500; letter-spacing: 0; }
+.hmi-doc__summary { font-size: 20px; line-height: 1.5; color: var(--doc-muted); max-width: 920px; }
+.hmi-doc__number { width: 144px; text-align: right; font-size: 112px; line-height: 1; font-weight: 300; color: var(--doc-accent); }
+
+/* ---------- sections */
+.hmi-doc__content { display: flex; flex-direction: column; gap: 32px; }
+.hmi-doc__section { display: flex; gap: 40px; padding: 32px 0 8px; border-top: 1px solid var(--doc-line); }
+.hmi-doc__intro { width: 232px; flex: none; display: flex; flex-direction: column; gap: 14px; }
+.hmi-doc__section-title { margin: 0; font-size: 25px; line-height: 1.2; font-weight: 600; }
+.hmi-doc__explanation { font-size: 16px; line-height: 1.5; color: var(--doc-muted); }
+.hmi-doc__evidence { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
+
+/* ---------- tables */
+.hmi-doc__table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 14px; line-height: 1.5; }
+.hmi-doc__table th { padding: 13px 16px; background: var(--doc-header-bg); text-align: left; font-size: 12px; font-weight: 600; color: var(--doc-muted); }
+.hmi-doc__table td { padding: 15px 16px; border-bottom: 1px solid var(--doc-line); vertical-align: top; overflow-wrap: anywhere; }
+.hmi-doc__table td .sub { color: var(--doc-muted); }
+.hmi-doc__table code { font-size: 13px; }
+
+/* ---------- callout, footnote, mono line */
+.hmi-doc__callout { display: flex; flex-direction: column; gap: 8px; padding: 20px 24px 20px 20px; background: var(--doc-callout-bg); border-left: 3px solid var(--doc-accent); color: var(--doc-muted); font-size: 14px; line-height: 1.5; }
+.hmi-doc__callout strong { font-size: 16px; font-weight: 600; }
+.hmi-doc__note,
+.hmi-doc__mono { font-size: 14px; line-height: 1.5; color: var(--doc-muted); }
+.hmi-doc__mono { font-family: var(--doc-mono); overflow-wrap: anywhere; }
+
+/* ---------- dark panel */
+.hmi-doc__panel { display: flex; flex-direction: column; gap: 20px; padding: 28px; border-radius: 12px; background: var(--doc-dark-bg); color: var(--doc-dark-muted); font-size: 16px; line-height: 1.5; }
+.hmi-doc__panel .hmi-doc__context { color: var(--doc-dark-muted); }
+.hmi-doc__panel-statement { font-size: 34px; line-height: 1.25; color: var(--doc-dark-text); }
+
+/* ---------- stat figures */
+.hmi-doc__stats { display: grid; grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr)); gap: 20px; }
+.hmi-doc__stat { display: flex; flex-direction: column; gap: 8px; padding: 20px 20px 20px 0; border-top: 1px solid var(--doc-line); color: var(--doc-muted); font-size: 14px; line-height: 1.5; }
+.hmi-doc__stat-figure { font-size: 48px; font-weight: 500; color: var(--doc-text); line-height: 1.1; }
+.hmi-doc__stat-label { font-size: 16px; font-weight: 600; }
+
+/* ---------- live token specimens */
+.hmi-doc__swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); gap: 12px; }
+.hmi-doc__swatch { display: flex; flex-direction: column; gap: 6px; font-size: 12px; line-height: 1.35; }
+.hmi-doc__chip { height: 56px; border-radius: 6px; border: 1px solid var(--doc-line); background-image: linear-gradient(45deg, #e9e8e1 25%, transparent 25%, transparent 75%, #e9e8e1 75%), linear-gradient(45deg, #e9e8e1 25%, transparent 25%, transparent 75%, #e9e8e1 75%); background-size: 12px 12px; background-position: 0 0, 6px 6px; position: relative; overflow: hidden; }
+.hmi-doc__chip > span { position: absolute; inset: 0; }
+.hmi-doc__swatch-name { font-weight: 600; overflow-wrap: anywhere; }
+.hmi-doc__swatch-value { font-family: var(--doc-mono); color: var(--doc-muted); }
+
+/* ---------- footer */
+.hmi-doc__footer { display: flex; justify-content: space-between; padding-top: 24px; border-top: 1px solid var(--doc-line); font-size: 12px; color: var(--doc-muted); white-space: nowrap; }
+
+@media (max-width: 900px) {
+  .hmi-doc { padding: 24px 16px; }
+  .hmi-doc__nav { overflow-x: auto; }
+  .hmi-doc__nav a { min-width: 120px; }
+  .hmi-doc__section { flex-direction: column; gap: 20px; }
+  .hmi-doc__intro { width: auto; }
+  .hmi-doc__title { font-size: 40px; }
+  .hmi-doc__number { font-size: 64px; width: auto; }
+  .hmi-doc__stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

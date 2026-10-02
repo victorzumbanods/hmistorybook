@@ -7,9 +7,13 @@ const COLLECTION_FIELDS = ['id', 'name', 'key', 'modes', 'defaultModeId', 'varia
 const VARIABLE_FIELDS = ['id', 'name', 'key', 'variableCollectionId', 'resolvedType', 'valuesByMode', 'scopes', 'codeSyntax', 'description', 'remote', 'hiddenFromPublishing']
 
 const round = (n, places) => Math.round(n * 10 ** places) / 10 ** places
+// Code-point order: identical in Node and in Figma's plugin sandbox (localeCompare is not).
+const cmp = (a, b) => (a < b ? -1 : a > b ? 1 : 0)
 
 function normalizeValue(value, type) {
   if (value && typeof value === 'object' && value.type === 'VARIABLE_ALIAS') return { type: 'VARIABLE_ALIAS', id: value.id }
+  // Alias (or color) with opacity, e.g. { color: { type: 'VARIABLE_ALIAS', id }, opacity: 12 }
+  if (value && typeof value === 'object' && 'color' in value && 'opacity' in value) return { color: normalizeValue(value.color, type), opacity: round(value.opacity, 4) }
   if (type === 'COLOR') return { r: round(value.r, 6), g: round(value.g, 6), b: round(value.b, 6), a: round(value.a ?? 1, 6) }
   if (type === 'FLOAT') return round(value, 4)
   return value
@@ -29,13 +33,13 @@ export function normalize(input) {
   const colName = new Map(collections.map((c) => [c.id, c.name]))
 
   const outCollections = {}
-  for (const c of [...collections].sort((a, b) => a.name.localeCompare(b.name))) {
+  for (const c of [...collections].sort((a, b) => cmp(a.name, b.name))) {
     outCollections[c.id] = pick({ ...c, modes: c.modes.map((m) => ({ modeId: m.modeId, name: m.name })) }, COLLECTION_FIELDS)
   }
 
   const outVariables = {}
   const sorted = [...variables].sort(
-    (a, b) => (colName.get(a.variableCollectionId) ?? '').localeCompare(colName.get(b.variableCollectionId) ?? '') || a.name.localeCompare(b.name),
+    (a, b) => cmp(colName.get(a.variableCollectionId) ?? '', colName.get(b.variableCollectionId) ?? '') || cmp(a.name, b.name),
   )
   for (const v of sorted) {
     const valuesByMode = {}
