@@ -66,7 +66,8 @@ The workflow [.github/workflows/figma-tokens.yml](.github/workflows/figma-tokens
 
 ### 2. Path A: Figma plugin (any Figma plan)
 
-1. Figma desktop → **Plugins → Development → Import plugin from manifest…** → `figma-plugin/manifest.json`.
+1. Figma desktop → main menu → **Plugins → Development → Import plugin from manifest…** → `figma-plugin/manifest.json`.
+   Use **Plugins**, not **Widgets**. Importing through Widgets fails with `Manifest error: Expected "manifest.containsWidget" to have type true`. If that happened, remove the entry under **Widgets → Development → Manage widgets in development** first, then import again through Plugins.
 2. Signed in as `victorzumbanods`, create a **fine-grained token** with access to `victorzumbanods/hmistorybook` only, and **Contents: Read and write**.
 3. Open the HMI Foundations file, run **HMI Variables → GitHub** (the repository field is prefilled), paste the token, then click **Sync**.
 
