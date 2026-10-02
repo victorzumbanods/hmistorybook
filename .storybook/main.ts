@@ -36,6 +36,7 @@ const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
   addons: ['@storybook/addon-docs'],
   framework: '@storybook/react-vite',
+  staticDirs: [{ from: '../src/public', to: '/' }],
   async viteFinal(config) {
     config.plugins = [...(config.plugins ?? []), figmaTokensWatcher()]
     return config
