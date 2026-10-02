@@ -48,15 +48,18 @@ Each multi-mode collection also becomes a Storybook toolbar switch, generated fr
 
 ### 1. GitHub repository
 
-```bash
-# create an empty private repo on github.com first, e.g. hmi-storybook
-git remote add origin git@github.com:<owner>/hmi-storybook.git
-git push -u origin main
-```
+This project lives only in **[victorzumbanods/hmistorybook](https://github.com/victorzumbanods/hmistorybook)** and only the `victorzumbanods` GitHub account pushes to it.
 
-Then in the repo on GitHub:
+- Git identity is set per repo (`git config user.name/user.email`) to `victorzumbanods` and its noreply e-mail.
+- Pushes use a dedicated SSH key, `~/.ssh/id_ed25519_whirlpool_github`, through the `github-whirlpool` host alias, so other GitHub keys on the machine are never used here:
+  ```bash
+  git remote -v   # origin  git@github-whirlpool:victorzumbanods/hmistorybook.git
+  ssh -T git@github-whirlpool   # Hi victorzumbanods!
+  ```
 
-- **Settings → Pages → Source: GitHub Actions.** (Pages on a private repo needs GitHub Pro, Team or Enterprise. On a free account, make the repo public or deploy to Chromatic instead.)
+In the repo on GitHub:
+
+- **Settings → Pages → Source: GitHub Actions.**
 - **Settings → Actions → General → Workflow permissions: Read and write.**
 
 The workflow [.github/workflows/figma-tokens.yml](.github/workflows/figma-tokens.yml) runs on every push to `main`. It rebuilds tokens, commits the generated files, builds Storybook and deploys it to Pages.
@@ -64,8 +67,8 @@ The workflow [.github/workflows/figma-tokens.yml](.github/workflows/figma-tokens
 ### 2. Path A: Figma plugin (any Figma plan)
 
 1. Figma desktop → **Plugins → Development → Import plugin from manifest…** → `figma-plugin/manifest.json`.
-2. Create a GitHub **fine-grained token** limited to this repository, with **Contents: Read and write**.
-3. Open your Figma file, run **HMI Variables → GitHub**, fill in `owner/repo` and the token, then click **Sync**.
+2. Signed in as `victorzumbanods`, create a **fine-grained token** with access to `victorzumbanods/hmistorybook` only, and **Contents: Read and write**.
+3. Open the HMI Foundations file, run **HMI Variables → GitHub** (the repository field is prefilled), paste the token, then click **Sync**.
 
 The plugin exports every local variable (plus library variables they alias), shows which variables changed, and commits the JSON with those names in the commit message. The push triggers the workflow and Storybook is live in about 2 minutes.
 
@@ -81,9 +84,8 @@ The Variables REST API and webhooks need Figma Enterprise and a token with `file
 2. Deploy the relay (GitHub needs an auth header that Figma webhooks cannot send):
    ```bash
    cd relay
-   # set GITHUB_REPO in wrangler.toml
    npx wrangler secret put FIGMA_WEBHOOK_PASSCODE
-   npx wrangler secret put GITHUB_TOKEN        # fine-grained PAT, Contents: Read and write
+   npx wrangler secret put GITHUB_TOKEN        # victorzumbanods fine-grained PAT, hmistorybook only, Contents: Read and write
    npx wrangler deploy
    ```
 3. Register the webhook:
