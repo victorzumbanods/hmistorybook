@@ -1,0 +1,97 @@
+# Figma Variables → GitHub → Storybook
+#
+# Triggers
+#   push to main          the Figma plugin committed tokens/figma-variables.json (any plan)
+#   repository_dispatch   the webhook relay saw a Figma LIBRARY_PUBLISH (Enterprise, REST API)
+#   workflow_dispatch     manual "pull from Figma now" button in the Actions tab
+#
+# Every run rebuilds src/tokens/*, commits them if they changed, builds Storybook and deploys it to GitHub Pages.
+
+name: Figma Variables → Storybook
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  repository_dispatch:
+    types: [figma-variables-updated]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: storybook-pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      FIGMA_TOKEN: ${{ secrets.FIGMA_TOKEN }}
+      FIGMA_FILE_KEY: ${{ github.event.client_payload.file_key || vars.FIGMA_FILE_KEY }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 2
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Pull variables from the Figma REST API
+        if: github.event_name != 'push' && env.FIGMA_TOKEN != '' && env.FIGMA_FILE_KEY != ''
+        run: npm run tokens:pull
+
+      - name: Build tokens
+        run: npm run tokens:build
+
+      - name: Commit generated tokens
+        run: |
+          git config user.name "figma-variables[bot]"
+          git config user.email "figma-variables[bot]@users.noreply.github.com"
+          git add tokens src/tokens
+          if git diff --cached --quiet; then
+            echo "No token changes to commit."
+          else
+            git diff --cached --stat
+            git commit -m "chore(tokens): regenerate from Figma variables [skip ci]"
+            git push
+          fi
+
+      - name: Token changes summary
+        run: |
+          {
+            echo "## Figma variables"
+            echo
+            echo "Trigger: \`${{ github.event_name }}\`"
+            echo
+            echo '```diff'
+            git diff HEAD~1 -- src/tokens/tokens.css | grep -E '^[+-]\s+--' | head -100 || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - run: npm run typecheck
+
+      - name: Build Storybook
+        run: npx storybook build --quiet
+
+      - uses: actions/configure-pages@v6
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: storybook-static
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

@@ -1,0 +1,6 @@
+name = "figma-webhook-relay"
+main = "worker.js"
+compatibility_date = "2026-10-01"
+
+[vars]
+GITHUB_REPO = "OWNER/REPO"

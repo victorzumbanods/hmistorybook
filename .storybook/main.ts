@@ -26,11 +26,8 @@ const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
   addons: ['@storybook/addon-docs'],
   framework: '@storybook/react-vite',
-  staticDirs: [],
   async viteFinal(config) {
     config.plugins = [...(config.plugins ?? []), figmaTokensWatcher()]
-    // GitHub Pages serves from /<repo>/
-    if (process.env.STORYBOOK_BASE) config.base = process.env.STORYBOOK_BASE
     return config
   },
 }
